@@ -7,15 +7,13 @@ import org.example.user_management_2.service.DepartmentService;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
-  private DepartmentRepository departmentRepository;
-
-  public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
-    this.departmentRepository = departmentRepository;
-  }
+  private final DepartmentRepository departmentRepository;
 
   @Override
   @Transactional

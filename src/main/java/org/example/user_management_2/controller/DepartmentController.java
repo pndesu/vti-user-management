@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class DepartmentController {
-  private DepartmentService departmentService;
+import lombok.RequiredArgsConstructor;
 
-  public DepartmentController(DepartmentService departmentService){
-    this.departmentService = departmentService;
-  }
+@RestController
+@RequiredArgsConstructor
+public class DepartmentController {
+  private final DepartmentService departmentService;
   
   @PostMapping("/v1/departments")
   public ResponseEntity<BaseResponse<Department>> createDepartment(@RequestBody Department department){

@@ -5,12 +5,14 @@ import java.time.Instant;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "departments")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Department{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

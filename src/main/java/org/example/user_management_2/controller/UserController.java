@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+
 import org.example.user_management_2.common.*;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
 
   @GetMapping("/v1/users")
   public ResponseEntity<BaseResponse<List<User>>> getUsers() {

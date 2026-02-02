@@ -15,17 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private UserRepository userRepository;
-  private DepartmentRepository departmentRepository;
-
-  public UserServiceImpl(UserRepository userRepository, DepartmentRepository departmentRepository) {
-    this.userRepository = userRepository;
-    this.departmentRepository = departmentRepository;
-  }
+  private final UserRepository userRepository;
+  private final DepartmentRepository departmentRepository;
 
   @Override
   public List<User> getUsersFromService() {
