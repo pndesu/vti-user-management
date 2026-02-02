@@ -3,9 +3,11 @@ package org.example.user_management_2.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
 import org.example.user_management_2.entity.Department;
 import org.example.user_management_2.entity.User;
+import org.example.user_management_2.exception.BusinessException;
 import org.example.user_management_2.repository.DepartmentRepository;
 import org.example.user_management_2.repository.UserRepository;
 import org.example.user_management_2.service.UserService;
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getUserByIdFromService(Integer id) {
     User existedUser = userRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+        .orElseThrow(() -> new BusinessException("User not found"));
     return existedUser;
   }
 
@@ -64,55 +66,59 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public User createUserFromService(User user) {
+  public User createUserFromService(CreateUserRequest user) {
     if (user.getUsername() == null) {
-      throw new RuntimeException("username must not be null");
+      throw new BusinessException("username must not be null");
     }
     if (user.getPassword() == null) {
-      throw new RuntimeException("password must not be null");
+      throw new BusinessException("password must not be null");
     }
     if (user.getFirstName() == null) {
-      throw new RuntimeException("first name must not be null");
+      throw new BusinessException("first name must not be null");
     }
     if (user.getLastName() == null) {
-      throw new RuntimeException("last name must not be null");
+      throw new BusinessException("last name must not be null");
     }
-    if (user.getRole() == null) {
-      throw new RuntimeException("role must not be null");
-    }
-    if (user.getDepartment() == null) {
-      throw new RuntimeException("department must not be null");
-    }
+    // if (user.getRole() == null) {
+    //   throw new BusinessException("role must not be null");
+    // }
+    // if (user.getDepartment() == null) {
+    //   throw new BusinessException("department must not be null");
+    // }
 
     User existedUser = userRepository.findByUsername(user.getUsername());
     if (existedUser != null) {
-      throw new RuntimeException("username already existed");
+      throw new BusinessException("username already existed");
     }
 
     // Department existingDept =
     // departmentRepository.findById(user.getDepartment().getId())
-    // .orElseThrow(() -> new RuntimeException("Department not found"));
+    // .orElseThrow(() -> new BusinessException("Department not found"));
     // user.setDepartment(existingDept);
-
-    Optional<Department> department = departmentRepository.findById(user.getDepartment().getId());
-    if (department.isEmpty()) { // department == null
-      throw new RuntimeException("department not found");
+    User createdUser = new User();
+    if (user.getDepartment() != null){
+      Optional<Department> department = departmentRepository.findById(user.getDepartment().getId());
+      if (department.isEmpty()) { // department == null
+        throw new BusinessException("department not found");
+      }
+      createdUser.setDepartment(user.getDepartment());
     }
-    user.setDepartment(department.get());
-
-    User createdUser = userRepository.save(user);
+    createdUser.setUsername(user.getUsername());
+    createdUser.setPassword(user.getPassword());
+    createdUser.setFirstName(user.getFirstName());
+    createdUser.setLastName(user.getLastName());
     return createdUser;
   }
 
   @Override
   @Transactional
   public User updateUser(Integer id, UpdateUserRequest updateUserRequest) {
-    if (updateUserRequest.getPassword() == null) {throw new RuntimeException("Password is not entered");}
-    if (updateUserRequest.getFirstName() == null) {throw new RuntimeException("FirstName is not entered");}
-    if (updateUserRequest.getLastName() == null) {throw new RuntimeException("LastName is not entered");}
-    if (updateUserRequest.getDepartmentId() == null) {throw new RuntimeException("DepartmentId is not entered");}
-    User existedUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-    Department department = departmentRepository.findById(updateUserRequest.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department not found"));
+    if (updateUserRequest.getPassword() == null) {throw new BusinessException("Password is not entered");}
+    if (updateUserRequest.getFirstName() == null) {throw new BusinessException("FirstName is not entered");}
+    if (updateUserRequest.getLastName() == null) {throw new BusinessException("LastName is not entered");}
+    if (updateUserRequest.getDepartmentId() == null) {throw new BusinessException("DepartmentId is not entered");}
+    User existedUser = userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
+    Department department = departmentRepository.findById(updateUserRequest.getDepartmentId()).orElseThrow(() -> new BusinessException("Department not found"));
     existedUser.setPassword(updateUserRequest.getPassword());
     existedUser.setFirstName(updateUserRequest.getFirstName());
     existedUser.setLastName(updateUserRequest.getLastName());
@@ -123,7 +129,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public Boolean deleteUser(Integer id) {
-    User existedUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    User existedUser = userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
     userRepository.deleteById(id);
     return true;
   }

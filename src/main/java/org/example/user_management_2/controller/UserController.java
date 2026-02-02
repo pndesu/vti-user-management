@@ -2,6 +2,7 @@ package org.example.user_management_2.controller;
 
 import java.util.List;
 
+import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
 import org.example.user_management_2.entity.User;
 import org.example.user_management_2.service.UserService;
@@ -59,9 +60,9 @@ public class UserController {
   }
 
   @PostMapping("/v1/users")
-  public ResponseEntity<BaseResponse<User>> createUser(@RequestBody User user) {
+  public ResponseEntity<BaseResponse<User>> createUser(@RequestBody CreateUserRequest user) {
     User createdUser = userService.createUserFromService(user);
-    BaseResponse<User> response = new BaseResponse<User>(user, "Created user successfully");
+    BaseResponse<User> response = new BaseResponse<User>(createdUser, "Created user successfully");
     return ResponseEntity.ok(response);
   }
 
