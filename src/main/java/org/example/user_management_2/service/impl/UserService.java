@@ -11,7 +11,10 @@ import org.example.user_management_2.exception.BusinessException;
 import org.example.user_management_2.repository.DepartmentRepository;
 import org.example.user_management_2.repository.UserRepository;
 import org.example.user_management_2.service.IUserService;
+import org.example.user_management_2.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.rsocket.RSocketProperties.Server.Spec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -47,15 +50,26 @@ public class UserService implements IUserService {
 
   @Override
   public List<User> getUsersByName(String firstName, String lastName) {
-    if (firstName == null && lastName == null) {
-      return userRepository.findAll();
-    } else if (firstName != null && lastName == null) {
-      return userRepository.findByFirstNameContainingIgnoreCase(firstName);
-    } else if (firstName == null) {
-      return userRepository.findByLastNameContainingIgnoreCase(lastName);
-    } else {
-      return userRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
+    Specification<User> spec = Specification.where(null);
+    
+    if (firstName != null){
+      spec = spec.and(UserSpecification.firstNameLike(firstName));
     }
+
+    if (lastName != null){
+      spec = spec.and(UserSpecification.lastNameLike(lastName));
+    }
+
+    return userRepository.findAll(spec);
+    // if (firstName == null && lastName == null) {
+    //   return userRepository.findAll();
+    // } else if (firstName != null && lastName == null) {
+    //   return userRepository.findByFirstNameContainingIgnoreCase(firstName);
+    // } else if (firstName == null) {
+    //   return userRepository.findByLastNameContainingIgnoreCase(lastName);
+    // } else {
+    //   return userRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
+    // }
   }
 
   @Override

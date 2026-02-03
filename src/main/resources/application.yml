@@ -3,3 +3,5 @@ spring:
     url: jdbc:mysql://localhost:3306/user_management
     username: root
     password: 123456789
+  jpa:
+    show-sql: true
