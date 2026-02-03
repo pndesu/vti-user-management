@@ -12,4 +12,5 @@ public class GlobalExceptionHandler{
   public ResponseEntity<BaseResponse<Object>> handleBusinessException(BusinessException e){
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, e.getMessage()));
   }
+  // todo xử lý thêm exception là : Exception -> default báo lỗi : "Lỗi hệ thống, vui lòng thử lại sau"
 }

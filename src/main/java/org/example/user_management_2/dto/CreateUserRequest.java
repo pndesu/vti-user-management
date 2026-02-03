@@ -14,5 +14,5 @@ public class CreateUserRequest{
   private String password;
   private String firstName;
   private String lastName;
-  private Department department;
+  private Department department; // todo không đúng, không ai truyền cả department lên cả, phải là department-id
 }

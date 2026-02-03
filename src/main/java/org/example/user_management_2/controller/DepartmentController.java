@@ -21,6 +21,8 @@ public class DepartmentController {
   
   @PostMapping("/v1/departments")
   public ResponseEntity<BaseResponse<Department>> createDepartment(@RequestBody Department department){
+    // TODO đang trả về sai đối tượng, phải là createdDepartment
+    // TODO a thấy đã biết dùng DTO rồi, thì api này e cũng update về để request nhận vào là 1 DTO nhé
     Department createdDepartment = departmentService.create(department);
     BaseResponse<Department> response = new BaseResponse<Department>(department, "Created department successfully");
     return ResponseEntity.ok(response);

@@ -19,6 +19,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   @Transactional
   public Department create(Department department) {
     if (department.getName() == null){
+      // TODO đã biết về business exception rồi thì toàn bộ phần này thay bằng business exception giúp anh
       throw new RuntimeException("department name cannot be null");
     }
 
@@ -27,6 +28,7 @@ public class DepartmentServiceImpl implements DepartmentService {
       throw new RuntimeException("department existed");
     }
 
+    // TODO nên return luôn: return departmentRepository.save(department); để code clean hơn
     Department createdDepartment = departmentRepository.save(department);
     return createdDepartment;
   }
@@ -39,6 +41,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
     Department existedDepartment = departmentRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Department not found"));
+    // TODO ở api create đang thấy chêck trùng name, thì khi update cũng phải check trùng name,
+    //  vì có thể họ sẽ update 1 cái name mà trùng với cái đã có trong db
     existedDepartment.setName(updateDepartmentRequest.getName());
     return existedDepartment;
   }
@@ -46,6 +50,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   @Override
   @Transactional
   public Boolean delete(Integer id) {
+    // TODO không khai variable nếu không dùng, để clean và k cần sử dụng mem không cần thiết
     Department existedDepartment = departmentRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Department not found"));
     departmentRepository.deleteById(id);

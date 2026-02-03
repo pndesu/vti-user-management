@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUserByIdFromService(Integer id) {
+    // TODO return luôn (xem bên department-service) để clean code
     User existedUser = userRepository.findById(id)
         .orElseThrow(() -> new BusinessException("User not found"));
     return existedUser;
@@ -38,12 +39,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getUsersByFirstName(String firstName) {
+    // TODO return luôn (xem bên department-service) để clean code
     List<User> userList = userRepository.findByFirstNameContainingIgnoreCase(firstName);
     return userList;
   }
 
   @Override
   public List<User> getUsersByLastName(String lastName) {
+    // TODO return luôn (xem bên department-service) để clean code
     List<User> userList = userRepository.findByLastNameContainingIgnoreCase(lastName);
     return userList;
   }
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
       return userRepository.findAll();
     } else if (firstName != null && lastName == null) {
       return userRepository.findByFirstNameContainingIgnoreCase(firstName);
-    } else if (firstName == null && lastName != null) {
+    } else if (firstName == null && lastName != null) { // TODO có thể remove "lastName != null" vì đến bước này là lastName đã phải khác null rồi
       return userRepository.findByLastNameContainingIgnoreCase(lastName);
     } else {
       return userRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
@@ -110,6 +113,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User updateUser(Integer id, UpdateUserRequest updateUserRequest) {
+    // TODO refacttor lại (xuống dòng) cho clean code
     if (updateUserRequest.getPassword() == null) {throw new BusinessException("Password is not entered");}
     if (updateUserRequest.getFirstName() == null) {throw new BusinessException("FirstName is not entered");}
     if (updateUserRequest.getLastName() == null) {throw new BusinessException("LastName is not entered");}
@@ -126,6 +130,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public Boolean deleteUser(Integer id) {
+    // todo không khai báo variable nếu không dùng tơi (clean code)
     User existedUser = userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
     userRepository.deleteById(id);
     return true;

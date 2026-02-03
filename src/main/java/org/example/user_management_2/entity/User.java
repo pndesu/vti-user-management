@@ -25,7 +25,8 @@ public class User {
   private String lastName;
 
   private String role;
-  
+
+  // Todo lưu ý sử dụng @ManyToOne cẩn thận không dễ bị N+1 query hoặc các vấn đề performance
   @ManyToOne
   @JoinColumn(name = "department_id")
   private Department department;

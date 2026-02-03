@@ -24,6 +24,7 @@ import org.example.user_management_2.common.*;
 
 @RestController
 @RequiredArgsConstructor
+// TODO các api đều có prefĩ là /v1/users => e có thể dùng @RequestMapping
 public class UserController {
   private final UserService userService;
 
