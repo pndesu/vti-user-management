@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdateDepartmentRequest{
+public class CreateDepartmentRequest{
   private String name;
 }

@@ -6,7 +6,7 @@ import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
 import org.example.user_management_2.entity.User;
 
-public interface UserService{
+public interface IUserService{
   List<User> getUsersFromService();
   User createUserFromService(CreateUserRequest user);
   User getUserByIdFromService(Integer id);

@@ -10,7 +10,7 @@ import org.example.user_management_2.entity.User;
 import org.example.user_management_2.exception.BusinessException;
 import org.example.user_management_2.repository.DepartmentRepository;
 import org.example.user_management_2.repository.UserRepository;
-import org.example.user_management_2.service.UserService;
+import org.example.user_management_2.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserService implements IUserService {
 
   private final UserRepository userRepository;
   private final DepartmentRepository departmentRepository;
@@ -31,21 +31,18 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUserByIdFromService(Integer id) {
-    User existedUser = userRepository.findById(id)
+    return userRepository.findById(id)
         .orElseThrow(() -> new BusinessException("User not found"));
-    return existedUser;
   }
 
   @Override
   public List<User> getUsersByFirstName(String firstName) {
-    List<User> userList = userRepository.findByFirstNameContainingIgnoreCase(firstName);
-    return userList;
+    return userRepository.findByFirstNameContainingIgnoreCase(firstName);
   }
 
   @Override
   public List<User> getUsersByLastName(String lastName) {
-    List<User> userList = userRepository.findByLastNameContainingIgnoreCase(lastName);
-    return userList;
+    return userRepository.findByLastNameContainingIgnoreCase(lastName);
   }
 
   @Override
@@ -54,7 +51,7 @@ public class UserServiceImpl implements UserService {
       return userRepository.findAll();
     } else if (firstName != null && lastName == null) {
       return userRepository.findByFirstNameContainingIgnoreCase(firstName);
-    } else if (firstName == null && lastName != null) {
+    } else if (firstName == null) {
       return userRepository.findByLastNameContainingIgnoreCase(lastName);
     } else {
       return userRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
@@ -77,10 +74,10 @@ public class UserServiceImpl implements UserService {
       throw new BusinessException("last name must not be null");
     }
     // if (user.getRole() == null) {
-    //   throw new BusinessException("role must not be null");
+    // throw new BusinessException("role must not be null");
     // }
     // if (user.getDepartment() == null) {
-    //   throw new BusinessException("department must not be null");
+    // throw new BusinessException("department must not be null");
     // }
 
     User existedUser = userRepository.findByUsername(user.getUsername());
@@ -93,12 +90,12 @@ public class UserServiceImpl implements UserService {
     // .orElseThrow(() -> new BusinessException("Department not found"));
     // user.setDepartment(existingDept);
     User createdUser = new User();
-    if (user.getDepartment() != null){
-      Optional<Department> department = departmentRepository.findById(user.getDepartment().getId());
+    if (user.getDepartmentId() != null) {
+      Optional<Department> department = departmentRepository.findById(user.getDepartmentId());
       if (department.isEmpty()) { // department == null
         throw new BusinessException("department not found");
       }
-      createdUser.setDepartment(user.getDepartment());
+      createdUser.setDepartment(department.get());
     }
     createdUser.setUsername(user.getUsername());
     createdUser.setPassword(user.getPassword());
@@ -110,12 +107,21 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User updateUser(Integer id, UpdateUserRequest updateUserRequest) {
-    if (updateUserRequest.getPassword() == null) {throw new BusinessException("Password is not entered");}
-    if (updateUserRequest.getFirstName() == null) {throw new BusinessException("FirstName is not entered");}
-    if (updateUserRequest.getLastName() == null) {throw new BusinessException("LastName is not entered");}
-    if (updateUserRequest.getDepartmentId() == null) {throw new BusinessException("DepartmentId is not entered");}
+    if (updateUserRequest.getPassword() == null) {
+      throw new BusinessException("Password is not entered");
+    }
+    if (updateUserRequest.getFirstName() == null) {
+      throw new BusinessException("FirstName is not entered");
+    }
+    if (updateUserRequest.getLastName() == null) {
+      throw new BusinessException("LastName is not entered");
+    }
+    if (updateUserRequest.getDepartmentId() == null) {
+      throw new BusinessException("DepartmentId is not entered");
+    }
     User existedUser = userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
-    Department department = departmentRepository.findById(updateUserRequest.getDepartmentId()).orElseThrow(() -> new BusinessException("Department not found"));
+    Department department = departmentRepository.findById(updateUserRequest.getDepartmentId())
+        .orElseThrow(() -> new BusinessException("Department not found"));
     existedUser.setPassword(updateUserRequest.getPassword());
     existedUser.setFirstName(updateUserRequest.getFirstName());
     existedUser.setLastName(updateUserRequest.getLastName());
@@ -126,7 +132,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public Boolean deleteUser(Integer id) {
-    User existedUser = userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
+    userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
     userRepository.deleteById(id);
     return true;
   }

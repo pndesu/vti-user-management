@@ -14,5 +14,5 @@ public class CreateUserRequest{
   private String password;
   private String firstName;
   private String lastName;
-  private Department department;
+  private Integer departmentId;
 }
