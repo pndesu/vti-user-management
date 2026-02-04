@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
+import org.example.user_management_2.dto.UserFilter;
 import org.example.user_management_2.entity.User;
 import org.example.user_management_2.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,13 @@ public class UserController {
   public ResponseEntity<BaseResponse<Boolean>> deleteUser(@PathVariable Integer id){
     Boolean data = userService.deleteUser(id);
     BaseResponse<Boolean> response = new BaseResponse<Boolean>(data, "Deleted user successfully");
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<BaseResponse<List<User>>> search(UserFilter userFilter){
+    List<User> data = userService.search(userFilter);
+    BaseResponse<List<User>> response = new BaseResponse<List<User>>(data, "Search users successfully");
     return ResponseEntity.ok(response);
   }
 }

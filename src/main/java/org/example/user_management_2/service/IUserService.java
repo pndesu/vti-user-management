@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
+import org.example.user_management_2.dto.UserFilter;
 import org.example.user_management_2.entity.User;
 
 public interface IUserService{
@@ -15,4 +16,5 @@ public interface IUserService{
   List<User> getUsersByName(String firstName, String lastName);
   User updateUser(Integer id, UpdateUserRequest updateUserRequest);
   Boolean deleteUser(Integer id);
+  List<User> search(UserFilter userFilter);
 }
