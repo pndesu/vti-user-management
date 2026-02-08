@@ -3,7 +3,6 @@ package org.example.user_management_2.specification;
 import java.util.List;
 
 import org.example.user_management_2.entity.User;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties.Server.Spec;
 import org.springframework.data.jpa.domain.Specification;
 
 public class UserSpecification{

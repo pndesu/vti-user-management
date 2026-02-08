@@ -158,6 +158,7 @@ public class UserService implements IUserService {
 
   @Override
   public List<User> search(UserFilter userFilter) {
+    System.out.println("FirstName received: " + userFilter.getFirstName());
     Specification<User> spec = Specification.where(null);
 
     if (userFilter.getIds() != null) {
