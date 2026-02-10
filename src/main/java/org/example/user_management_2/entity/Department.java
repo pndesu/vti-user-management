@@ -3,7 +3,6 @@ package org.example.user_management_2.entity;
 import java.time.Instant;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

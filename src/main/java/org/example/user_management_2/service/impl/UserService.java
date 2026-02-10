@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.example.user_management_2.dto.CreateUserRequest;
 import org.example.user_management_2.dto.UpdateUserRequest;
 import org.example.user_management_2.dto.UserFilter;
+import org.example.user_management_2.dto.UserFilterV2;
 import org.example.user_management_2.entity.Department;
 import org.example.user_management_2.entity.User;
 import org.example.user_management_2.exception.BusinessException;
@@ -31,28 +32,28 @@ public class UserService implements IUserService {
   private final DepartmentRepository departmentRepository;
 
   @Override
-  public List<User> getUsersFromService() {
+  public List<User> get() {
     return userRepository.findAll();
   }
 
   @Override
-  public User getUserByIdFromService(Integer id) {
+  public User getById(Integer id) {
     return userRepository.findById(id)
         .orElseThrow(() -> new BusinessException("User not found"));
   }
 
   @Override
-  public List<User> getUsersByFirstName(String firstName) {
+  public List<User> getByFirstName(String firstName) {
     return userRepository.findByFirstNameContainingIgnoreCase(firstName);
   }
 
   @Override
-  public List<User> getUsersByLastName(String lastName) {
+  public List<User> getByLastName(String lastName) {
     return userRepository.findByLastNameContainingIgnoreCase(lastName);
   }
 
   @Override
-  public List<User> getUsersByName(String firstName, String lastName) {
+  public List<User> getByName(String firstName, String lastName) {
     Specification<User> spec = Specification.where(null);
 
     if (firstName != null) {
@@ -79,7 +80,7 @@ public class UserService implements IUserService {
 
   @Override
   @Transactional
-  public User createUserFromService(CreateUserRequest user) {
+  public User create(CreateUserRequest user) {
     if (user.getUsername() == null) {
       throw new BusinessException("username must not be null");
     }
@@ -120,12 +121,12 @@ public class UserService implements IUserService {
     createdUser.setPassword(user.getPassword());
     createdUser.setFirstName(user.getFirstName());
     createdUser.setLastName(user.getLastName());
-    return createdUser;
+    return userRepository.save(createdUser);
   }
 
   @Override
   @Transactional
-  public User updateUser(Integer id, UpdateUserRequest updateUserRequest) {
+  public User update(Integer id, UpdateUserRequest updateUserRequest) {
     if (updateUserRequest.getPassword() == null) {
       throw new BusinessException("Password is not entered");
     }
@@ -145,12 +146,12 @@ public class UserService implements IUserService {
     existedUser.setFirstName(updateUserRequest.getFirstName());
     existedUser.setLastName(updateUserRequest.getLastName());
     existedUser.setDepartment(department);
-    return existedUser;
+    return userRepository.save(existedUser);
   }
 
   @Override
   @Transactional
-  public Boolean deleteUser(Integer id) {
+  public Boolean delete(Integer id) {
     userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found"));
     userRepository.deleteById(id);
     return true;
@@ -179,6 +180,25 @@ public class UserService implements IUserService {
 
     if (userFilter.getRole() != null){
       spec = spec.and(UserSpecification.roleEquals(userFilter.getRole()));
+    }
+
+    return userRepository.findAll(spec);
+  }
+
+  @Override
+  public List<User> searchv2(UserFilterV2 userFilter) {
+    Specification<User> spec = Specification.where(null);
+
+    if (userFilter.getDepartmentId() != null){
+      spec = spec.and(UserSpecification.departmentIdEquals(userFilter.getDepartmentId()));
+    }
+
+    if (userFilter.getRole() != null){
+      spec = spec.and(UserSpecification.roleEquals(userFilter.getRole()));
+    }
+
+    if (userFilter.getName() != null){
+      spec = spec.and(UserSpecification.nameLike(userFilter.getName()));
     }
 
     return userRepository.findAll(spec);
