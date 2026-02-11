@@ -29,6 +29,7 @@ public class DepartmentController {
   @GetMapping("/search")
   public ResponseEntity<BaseResponse<List<Department>>> search(DepartmentFilter departmentFilter){
     List<Department> data = departmentService.search(departmentFilter);
+    // TODO sao lại return null
     return null;
   }
   @PostMapping

@@ -16,4 +16,6 @@ public class GlobalExceptionHandler{
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, "System error, please try again later"));
     }
   }
+  
+  // TODO không đúng, System error, please try again later => e phải bắt Exception chứ không phải BussinessException 
 }

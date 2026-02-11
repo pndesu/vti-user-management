@@ -88,6 +88,8 @@ public class UserController {
   }
 
   @GetMapping("/search")
+  // TODO advance: => Nếu trong searching có List thì sử dụng @PostMapping => mặc dù nó vi phạm RESTFULL API
+  //  Lý do : Web Server (như Apache, Nginx, Tomcat) đều có giới hạn về độ dài URL (thường khoảng 2048 - 8192 ky tự )
   public ResponseEntity<BaseResponse<List<User>>> search(UserFilter userFilter){
     List<User> data = userService.search(userFilter);
     BaseResponse<List<User>> response = new BaseResponse<List<User>>(data, "Search users successfully");
