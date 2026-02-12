@@ -3,27 +3,21 @@ package org.example.user_management_2.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.example.user_management_2.dto.CreateUserRequest;
-import org.example.user_management_2.dto.UpdateUserRequest;
-import org.example.user_management_2.dto.UserFilter;
-import org.example.user_management_2.dto.UserFilterV2;
-import org.example.user_management_2.entity.Department;
-import org.example.user_management_2.entity.User;
+import org.example.user_management_2.dto.*;
+import org.example.user_management_2.entity.*;
 import org.example.user_management_2.exception.BusinessException;
-import org.example.user_management_2.repository.DepartmentRepository;
-import org.example.user_management_2.repository.UserRepository;
+import org.example.user_management_2.repository.*;
 import org.example.user_management_2.service.IUserService;
 import org.example.user_management_2.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties.Server.Spec;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.util.Separators;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
@@ -159,7 +153,7 @@ public class UserService implements IUserService {
 
   @Override
   public List<User> search(UserFilter userFilter) {
-    System.out.println("FirstName received: " + userFilter.getFirstName());
+    log.info("User filter received: {}", userFilter);
     Specification<User> spec = Specification.where(null);
 
     if (userFilter.getIds() != null) {

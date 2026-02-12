@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler{
+public class GlobalExceptionHandler {
   @ExceptionHandler(BusinessException.class)
-  public ResponseEntity<BaseResponse<Object>> handleBusinessException(BusinessException e){
-    if (e.getMessage() != null){
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, e.getMessage()));
-    } else {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, "System error, please try again later"));
-    }
+  public ResponseEntity<BaseResponse<Object>> handleBusinessException(BusinessException e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, e.getMessage()));
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<BaseResponse<Object>> handleException(Exception e){
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(null, e.getMessage()));
   }
 }

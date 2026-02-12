@@ -25,28 +25,33 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/departments")
 public class DepartmentController {
   private final IDepartmentService departmentService;
-  
-  @GetMapping("/search")
-  public ResponseEntity<BaseResponse<List<Department>>> search(DepartmentFilter departmentFilter){
+
+  @PostMapping("/search")
+  public ResponseEntity<BaseResponse<List<Department>>> search(DepartmentFilter departmentFilter) {
     List<Department> data = departmentService.search(departmentFilter);
-    return null;
+    BaseResponse<List<Department>> response = new BaseResponse<List<Department>>(data,
+        "Retrieved department information successfully");
+    return ResponseEntity.ok(response);
   }
+
   @PostMapping
-  public ResponseEntity<BaseResponse<Department>> createDepartment(@RequestBody CreateDepartmentRequest department){
+  public ResponseEntity<BaseResponse<Department>> createDepartment(@RequestBody CreateDepartmentRequest department) {
     Department createdDepartment = departmentService.create(department);
-    BaseResponse<Department> response = new BaseResponse<Department>(createdDepartment, "Created department successfully");
+    BaseResponse<Department> response = new BaseResponse<Department>(createdDepartment,
+        "Created department successfully");
     return ResponseEntity.ok(response);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<BaseResponse<Department>> updateDepartment(@PathVariable Integer id, @RequestBody UpdateDepartmentRequest updateDepartmentRequest){
+  public ResponseEntity<BaseResponse<Department>> updateDepartment(@PathVariable Integer id,
+      @RequestBody UpdateDepartmentRequest updateDepartmentRequest) {
     Department data = departmentService.update(id, updateDepartmentRequest);
     BaseResponse<Department> response = new BaseResponse<Department>(data, "updated department successfully");
     return ResponseEntity.ok(response);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<BaseResponse<Boolean>> deleteDepartment(@PathVariable Integer id){
+  public ResponseEntity<BaseResponse<Boolean>> deleteDepartment(@PathVariable Integer id) {
     Boolean data = departmentService.delete(id);
     BaseResponse<Boolean> response = new BaseResponse<Boolean>(data, "deleted department successfully");
     return ResponseEntity.ok(response);

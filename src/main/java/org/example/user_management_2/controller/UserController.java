@@ -87,14 +87,14 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/search")
+  @PostMapping("/search")
   public ResponseEntity<BaseResponse<List<User>>> search(UserFilter userFilter){
     List<User> data = userService.search(userFilter);
     BaseResponse<List<User>> response = new BaseResponse<List<User>>(data, "Search users successfully");
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/search-v2")
+  @PostMapping("/search-v2")
   public ResponseEntity<BaseResponse<List<User>>> searchv2(UserFilterV2 userFilter){
     List<User> data = userService.searchv2(userFilter);
     BaseResponse<List<User>> response = new BaseResponse<List<User>>(data, "Search users successfully");
